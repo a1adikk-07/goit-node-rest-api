@@ -15,12 +15,14 @@ export const getContactById = async (contactId) => {
   return contact || null;
 };
 
-export const addContact = async (data) => {
+export const addContact = async (name, email, phone) => {
+  const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
-    ...data,
+    name,
+    email,
+    phone,
   };
-  const contacts = await listContacts();
   contacts.push(newContact);
 
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));

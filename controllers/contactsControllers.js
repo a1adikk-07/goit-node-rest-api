@@ -26,9 +26,9 @@ const deleteContact = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
-  const { name, email, body } = req.body;
+  const { name, email, phone } = req.body;
 
-  const contact = await contactsServices.addContact(name, email, body);
+  const contact = await contactsServices.addContact(name, email, phone);
 
   if (!contact) throw HttpError(404);
 
