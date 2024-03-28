@@ -1,16 +1,16 @@
-import * as contactsServices from "../services/contactsServices.js";
 import HttpError from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
+import { contactModel } from "../models/contacts.js";
 
 const getAllContacts = async (req, res, next) => {
-  const contacts = await contactsServices.listContacts();
+  const contacts = await contactModel.find();
   res.json(contacts);
 };
 
 const getOneContact = async (req, res, next) => {
   const { id } = req.params;
 
-  const contact = await contactsServices.getContactById(id);
+  const contact = await contactModel.findById(id);
 
   if (!contact) throw HttpError(404);
   res.json(contact);
@@ -19,8 +19,7 @@ const getOneContact = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
   const { id } = req.params;
 
-  const contact = await contactsServices.removeContact(id);
-
+  const contact = await contactModel.findByIdAndDelete(id);
   if (!contact) throw HttpError(404);
   res.json(contact);
 };
@@ -28,7 +27,7 @@ const deleteContact = async (req, res, next) => {
 const createContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
 
-  const contact = await contactsServices.addContact(name, email, phone);
+  const contact = await contactModel.create(name, email, phone);
 
   if (!contact) throw HttpError(404);
 
@@ -42,7 +41,18 @@ const updateContact = async (req, res, next) => {
 
   if (empty) throw HttpError(400, "Body must have at least one field");
 
-  const contact = await contactsServices.updContact(id, req.body);
+  const contact = await contactModel.findByIdAndUpdate(id, req.body);
+
+  if (!contact) throw HttpError(404);
+  res.json(contact);
+};
+
+const updateContactsStatus = async (req, res, next) => {
+  const { id } = req.params;
+
+  const contact = await contactModel.findByIdAndUpdate(id, res.body, {
+    new: true,
+  });
 
   if (!contact) throw HttpError(404);
   res.json(contact);
@@ -54,4 +64,5 @@ export const ctrl = {
   deleteContact: ctrlWrapper(deleteContact),
   createContact: ctrlWrapper(createContact),
   updateContact: ctrlWrapper(updateContact),
+  updateContactsStatus: ctrlWrapper(updateContactsStatus),
 };
