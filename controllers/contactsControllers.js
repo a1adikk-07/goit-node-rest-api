@@ -41,7 +41,9 @@ const updateContact = async (req, res, next) => {
 
   if (empty) throw HttpError(400, "Body must have at least one field");
 
-  const contact = await contactModel.findByIdAndUpdate(id, req.body);
+  const contact = await contactModel.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
 
   if (!contact) throw HttpError(404);
   res.json(contact);
