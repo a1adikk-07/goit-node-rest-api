@@ -12,7 +12,7 @@ const getOneContact = async (req, res, next) => {
 
   const contact = await contactModel.findById(id);
 
-  if (!contact) throw HttpError(404);
+  if (!contact) throw HttpError(400, `not valid id or has been deleted`);
   res.json(contact);
 };
 
@@ -55,6 +55,7 @@ const updateContactsStatus = async (req, res, next) => {
   });
 
   if (!contact) throw HttpError(404);
+
   res.json(contact);
 };
 

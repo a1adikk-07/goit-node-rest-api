@@ -6,7 +6,12 @@ export const isValidId = (req, res, next) => {
 
   console.log(isValidObjectId(id));
   if (!isValidObjectId(id)) {
-    next(HttpError(404, `id ${id} is not valid`));
+    next(
+      HttpError(
+        404,
+        `id ${id} is not valid or contact with this id has been deleted`
+      )
+    );
   }
 
   next();
