@@ -55,6 +55,7 @@ const updateContactsStatus = async (req, res, next) => {
   });
 
   if (!contact) throw HttpError(404);
+
   res.json(contact);
 };
 
