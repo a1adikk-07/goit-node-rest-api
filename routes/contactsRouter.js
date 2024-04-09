@@ -7,6 +7,7 @@ import {
   updateContactSchema,
   updateFavoriteSchema,
 } from "../models/contacts.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
 const contactsRouter = express.Router();
 
@@ -16,7 +17,12 @@ contactsRouter.get("/:id", isValidId, ctrl.getOneContact);
 
 contactsRouter.delete("/:id", isValidId, ctrl.deleteContact);
 
-contactsRouter.post("/", validateBody(createContactSchema), ctrl.createContact);
+contactsRouter.post(
+  "/",
+  authenticate,
+  validateBody(createContactSchema),
+  ctrl.createContact
+);
 
 contactsRouter.put(
   "/:id",
