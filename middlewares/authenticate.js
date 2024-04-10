@@ -5,7 +5,7 @@ import "dotenv/config.js";
 
 const { JWT_SECRET } = process.env;
 
-export const authenticate = async (res, req, next) => {
+export const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
 
