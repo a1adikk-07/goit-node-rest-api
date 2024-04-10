@@ -6,7 +6,7 @@ import { User } from "../models/user.js";
 
 const { JWT_SECRET } = process.env;
 
-const register = async (res, req) => {
+const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -24,16 +24,17 @@ const register = async (res, req) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (!user) throw HttpError(401, "Email or password is wrong");
 
-  const completedPassword = await bcrypt.compare(password, user.password);
+  const comparedPassword = await bcrypt.compare(password, user.password);
 
-  if (!completedPassword) throw HttpError(401, "Email or password is wrong");
+  if (!comparedPassword) throw HttpError(401, "Email or password is wrong");
 
   const payload = {
     id: user._id,
   };
-  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "47h" });
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
 
   res.json = {

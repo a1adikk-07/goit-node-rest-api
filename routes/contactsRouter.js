@@ -1,6 +1,6 @@
 import express from "express";
 import ctrl from "../controllers/contactsControllers.js";
-import { validateBody } from "../middlewares/validateBody.js";
+import validateBody from "../middlewares/validateBody.js";
 import { isValidId } from "../middlewares/isValidId.js";
 import {
   createContactSchema,
