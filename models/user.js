@@ -7,7 +7,7 @@ const subscriptionList = ["starter", "pro", "business"];
 
 export const createUserSchema = Joi.object({
   email: Joi.string().required().pattern(emailRegexp),
-  password: Joi.string().min(8).required(),
+  password: Joi.string().min(6).required(),
 });
 
 export const updateUserSchema = Joi.object({
@@ -20,7 +20,7 @@ const userSchema = new Schema(
   {
     password: {
       type: String,
-      minlength: 8,
+      minlength: 6,
       required: [true, "Password is required"],
     },
     email: {
@@ -31,7 +31,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subscriptionList,
       default: "starter",
     },
     token: {
@@ -43,4 +43,5 @@ const userSchema = new Schema(
 );
 
 userSchema.post("save", handleErrorMongoose);
+
 export const User = model("user", userSchema);

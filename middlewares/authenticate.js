@@ -15,10 +15,11 @@ export const authenticate = async (req, res, next) => {
 
     const user = await User.findById(id);
 
-    if (!user || !user.token || User.token !== token) next(HttpError(401));
+    if (!user || !user.token || user.token !== token) next(HttpError(401));
     req.user = user;
+
     next();
   } catch {
-    HttpError(401);
+    next(HttpError(401));
   }
 };

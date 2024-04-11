@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 import { User } from "../models/user.js";
+import "dotenv/config.js";
 
 const { JWT_SECRET } = process.env;
 
@@ -24,32 +25,27 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-
-  if (!user) throw HttpError(401, "Email or password is wrong");
-
+  if (user.email !== email) throw HttpError(401, "Email is wrong");
   const comparedPassword = await bcrypt.compare(password, user.password);
-
   if (!comparedPassword) throw HttpError(401, "Email or password is wrong");
-
   const payload = {
     id: user._id,
   };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
-
-  res.json = {
+  res.json({
     token: token,
     user: { email: user.email, subscription: user.subscription },
-  };
+  });
 };
 
-const getCurrent = (res, req) => {
+const getCurrent = (req, res) => {
   const { email, subscription } = req.user;
 
   res.json({ email, subscription });
 };
 
-const logout = async (res, req) => {
+const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findOneAndUpdate(_id, { token: null });
 
@@ -64,7 +60,7 @@ const updateSubscription = async (req, res) => {
   res.json({ message: "User subscription successful update" });
 };
 
-export default {
+export const ctrl = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),

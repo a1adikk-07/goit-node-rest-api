@@ -25,7 +25,7 @@ const getOneContact = async (req, res, next) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
 
-  const contact = await contactModel.findById({ _id: id, owner });
+  const contact = await contactModel.findOne({ _id: id, owner });
 
   if (!contact) throw HttpError(400, `not valid id or has been deleted`);
   res.json(contact);
@@ -55,9 +55,10 @@ const updateContact = async (req, res, next) => {
   const contact = await contactModel.findOne({ _id: id, owner });
   const empty = Object.keys(req.body).length === 0;
 
+  if (!contact) throw HttpError(404);
+
   if (empty) throw HttpError(400, "Body must have at least one field");
 
-  if (!contact) throw HttpError(404);
   await contactModel.findByIdAndUpdate(id, req.body, {
     new: true,
   });
