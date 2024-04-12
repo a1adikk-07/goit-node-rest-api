@@ -9,6 +9,9 @@ const { JWT_SECRET } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
+
+  if ((!email, !password)) throw HttpError(401, "Email or password is wrong");
+
   const user = await User.findOne({ email });
 
   if (user) throw HttpError(409, "Email in use");
