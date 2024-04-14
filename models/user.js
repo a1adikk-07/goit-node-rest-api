@@ -2,10 +2,11 @@ import { Schema, model } from "mongoose";
 import Joi from "joi";
 import { handleErrorMongoose } from "../helpers/handleMongooseError.js";
 
+const emailRegexp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const subscriptionList = ["starter", "pro", "business"];
 
 export const createUserSchema = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string().required().pattern(emailRegexp),
   password: Joi.string().min(6).required(),
 });
 
@@ -26,6 +27,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
+      match: emailRegexp,
     },
     subscription: {
       type: String,
