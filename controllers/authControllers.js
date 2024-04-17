@@ -1,6 +1,10 @@
-import HttpError from "../helpers/HttpError.js";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import fs from "fs/promises";
+import path from "path";
+import Jimp from "jimp";
+
+import HttpError from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 import { User } from "../models/user.js";
 import "dotenv/config.js";
@@ -26,14 +30,21 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (!user) throw HttpError(401, "Email or password is wrong");
+
   const comparedPassword = await bcrypt.compare(password, user.password);
+
   if (!comparedPassword) throw HttpError(401, "Email or password is wrong");
+
   const payload = {
     id: user._id,
   };
+
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+
   await User.findByIdAndUpdate(user._id, { token });
+
   res.json({
     token: token,
     user: { email: user.email, subscription: user.subscription },

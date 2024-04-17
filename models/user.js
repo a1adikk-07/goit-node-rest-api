@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import Joi from "joi";
+import Joi, { required } from "joi";
 import { handleErrorMongoose } from "../helpers/handleMongooseError.js";
 
 const emailRegexp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,6 +37,10 @@ const userSchema = new Schema(
     token: {
       type: String,
       default: null,
+    },
+    avatarURL: {
+      type: String,
+      required: [true, "avatarURL is required"],
     },
   },
   { versionKey: false, timestamps: true }
