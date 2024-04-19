@@ -3,6 +3,7 @@ import { createUserSchema, updateUserSchema } from "../models/user.js";
 import { ctrl } from "../controllers/authControllers.js";
 import validateBody from "../middlewares/validateBody.js";
 import { authenticate } from "../middlewares/authenticate.js";
+import upload from "../middlewares/upload.js";
 
 const authRouter = express.Router();
 
@@ -15,6 +16,12 @@ authRouter.patch(
   authenticate,
   validateBody(updateUserSchema),
   ctrl.updateSubscription
+);
+authRouter.patch(
+  "/avatars",
+  upload.single("avatar"),
+  authenticate,
+  ctrl.updateAvatar
 );
 
 export default authRouter;
