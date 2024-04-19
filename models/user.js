@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import Joi, { required } from "joi";
+import Joi from "joi";
 import { handleErrorMongoose } from "../helpers/handleMongooseError.js";
 
 const emailRegexp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

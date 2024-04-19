@@ -2,7 +2,7 @@ import HttpError from "../helpers/HttpError.js";
 import multer from "multer";
 import path from "path";
 
-const description = path.resolve("tmp");
+const destination = path.resolve("temp");
 
 const storage = multer.diskStorage({
   destination,
