@@ -89,7 +89,7 @@ const updateAvatar = async (req, res) => {
 
   const avatarPath = path.resolve("public", "avatar");
   const newPath = path.join(avatarPath, filename);
-  const avatarURL = path.join("avatar", filename);
+  const avatarURL = path.join("avatars", filename);
 
   Jimp.read(oldPath, (err, image) => {
     if (err) throw err;
